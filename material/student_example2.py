@@ -215,7 +215,7 @@ if __name__ == '__main__':
 '''
   QUESTIONS: 
 
-* Explain the optimal action in the initial state as calculated by VI.
+* Explain the optimal action in the interesting state of the __main__ as calculated by VI.
 
 * In some countries, the traffic lights are optimised in order to reduce the number of times cars cross the light when it is orange.  Explain how you would modify the model to mimic this behaviour.
 '''
