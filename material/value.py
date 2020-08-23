@@ -128,5 +128,8 @@ def compute_value_function_of_policy(pol: Policy, gamma: float, epsilon: Optiona
     Computes an approximated value function of the specified policy (V_{pi})
     by running the iterative algorithm described in the lecture.
     '''
-    # TODO
-    return ValueFunction(pol.get_domain())
+    # DONE
+    value_function = ValueFunction(pol.get_domain())
+    while value_function.compute_single_policy_backup(pol,gamma)[1] != 0:
+        value_function = value_function.compute_single_policy_backup(pol,gamma)[0]
+    return value_function
