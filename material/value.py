@@ -39,8 +39,14 @@ class ValueFunction:
         Returns the Q value of the specified action in the specified state, 
         using the current value function, with the specified discount factor gamma.
         '''
-        # TODO
-        return -1
+        # DONE
+        sum_value = 0
+        distribution = self._domain.get_next_state_distribution(state,action).get_values()
+        for (next_state, probability) in distribution:
+            sum_value += probability * (self._domain.get_transition_value(state,action,next_state).cost + gamma * self.__getitem__(next_state))
+
+
+        return sum_value
     
     def compute_single_policy_backup(self, policy: Policy, gamma: float) -> Tuple[ValueFunction, float]:
         '''
@@ -50,8 +56,21 @@ class ValueFunction:
         instead it returns a new value function, 
         together with the error associated with the backup operation.
         '''
-        # TODO
-        return self, -1
+        # DONE
+        new_value_function = ValueFunction(self._domain)
+        error = 0
+        for state in self._domain.get_observation_space().get_elements():
+            if self._domain.is_terminal(state):
+                new_value_function._values[state] = 0
+            else:
+                action = policy.__getitem__(state)
+                # distribution = self._domain.get_next_state_distribution(state,action).get_values()
+                new_value_function._values[state] = self.q_value(state,action,gamma)
+                if error < abs(self.q_value(state,action,gamma) - self.__getitem__(state)):
+                    error = abs(self.q_value(state,action,gamma) - self.__getitem__(state))
+
+
+        return new_value_function, error
 
     def compute_bellmann_backup(self, gamma: float) -> Tuple[ValueFunction, float]:
         '''
@@ -61,8 +80,19 @@ class ValueFunction:
         instead it returns a new value function, 
         together with the Bellmann error.
         '''
-        # TODO
-        return self, 0
+        # DONE
+        new_value_function = ValueFunction(self._domain)
+        error = 0
+        for state in self._domain.get_observation_space().get_elements():
+            if self._domain.is_terminal(state):
+                new_value_function.__setitem__(state,0)
+            else:
+                actions = self._domain.get_applicable_actions(state).get_elements()
+                backup_value_candidates = [self.q_value(state,action,gamma) for action in actions]
+                new_value_function._values[state] = min(backup_value_candidates)
+            error = max(error, abs(new_value_function.__getitem__(state) - self.__getitem__(state)))
+
+        return new_value_function, error
 
     def greedy_action(self, state: State, gamma: float) -> Tuple[Action,float]:
         '''
