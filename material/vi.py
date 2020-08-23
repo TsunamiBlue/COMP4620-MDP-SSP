@@ -53,8 +53,17 @@ class ValueIteration:
         or until the number of iterations is above the specified value.
         '''
         # TODO
-        pass
-        
+
+        if max_iteration is not None:
+            while self.single_backup() > epsilon:
+                if self._nb_iterations < max_iteration:
+                    return
+        else:
+            while True:
+                if self.single_backup() < epsilon:
+                    return
+        return
+
     def policy(self) -> Policy: 
         '''
         Returns the greedy policy for the current value function.

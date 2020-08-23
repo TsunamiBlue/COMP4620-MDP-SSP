@@ -100,8 +100,11 @@ class ValueFunction:
         according to the current value function.
         This method also returns the Q value of the greedy action.
         '''
-        # TODO
-        return Action(), 0
+        # DONE
+        actions = self._domain.get_applicable_actions(state).get_elements()
+        greedy_values = [(action, self.q_value(state,action,gamma)) for action in actions]
+        greedy_values_sorted = sorted(greedy_values,key= lambda x:x[1])
+        return greedy_values_sorted[0]
 
     def greedy_policy(self, gamma: float) -> Policy:
         '''
