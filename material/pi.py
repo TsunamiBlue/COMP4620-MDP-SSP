@@ -33,8 +33,9 @@ class PolicyIteration:
       '''
         Performs one iteration of the policy iteration algorithm.  
       '''
-      # TODO
-      pass
+      # DONE
+      value_function = compute_value_function_of_policy(self.get_policy(),self._gamma)
+      self._policy = value_function.greedy_policy(self._gamma)
 
   def policy_iteration(self) -> None:
       '''

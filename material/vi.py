@@ -52,8 +52,7 @@ class ValueIteration:
         until the error is below the epsilon threshold, 
         or until the number of iterations is above the specified value.
         '''
-        # TODO
-
+        # DONE
         if max_iteration is not None:
             while self.single_backup() > epsilon:
                 if self._nb_iterations < max_iteration:

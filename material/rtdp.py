@@ -46,8 +46,13 @@ class Simulation:
           * simulate the next action
           * update the number of steps
         '''
-        # TODO
-        pass
+        # DONE
+        (action, value) = self._values.greedy_action(self._current_state,self._gamma)
+        self._values.__setitem__(self._current_state,value)
+        self._current_depth+=1
+        # distribution = self._domain.get_next_state_distribution(self._current_state,action)
+        self._current_state = take_one_random_step(self._domain,self._current_state,action)
+        return
         
     def run_simulation(self) -> None:
         '''
