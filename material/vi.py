@@ -55,7 +55,7 @@ class ValueIteration:
         # DONE
         if max_iteration is not None:
             while self.single_backup() > epsilon:
-                if self._nb_iterations < max_iteration:
+                if self._nb_iterations > max_iteration:
                     return
         else:
             while True:

@@ -15,10 +15,23 @@ def hard_instance() -> StateMachine:
      is either 0 or at least 0.1.
     '''
     # TODO
+    transition_functions = [SMTransition("s6","a1",0,[("s6",1)]),
+                            SMTransition("s1", "a2", 1, [("s2", 0.8),("s5",0.2)]),
+                            SMTransition("s2", "a3", 1, [("s3", 1)]),
+                            SMTransition("s3", "a4", 1, [("s4", 1)]),
+                            SMTransition("s4", "a5", 1, [("s2", 1)]),
+                            SMTransition("s5", "a6", 1, [("s6", 1)]),
+                            # SMTransition("s2", "a2", 1, [("s2", 1)]),
+                            # SMTransition("s3", "a3", 1, [("s3", 1)]),
+                            # SMTransition("s4", "a4", 1, [("s4", 1)]),
+                            # SMTransition("s5", "a5", 1, [("s5", 1)]),
+                            # SMTransition("s1", "a6", 1, [("s2", 0.2),("s3",0.2),("s4",0.2),("s5",0.2),("s6",0.2)])
+                            ]
+
     return StateMachine(
-        [
-        ], "s1"
+        transition_functions, "s1"
     )
+
 
 if __name__ == '__main__':
     domain = hard_instance()
