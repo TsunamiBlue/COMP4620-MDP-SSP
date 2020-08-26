@@ -143,8 +143,12 @@ class TrafficLightDomain(Assignment1Domain):
         '''
           Returns the value of the transition
         '''
-        # TODO
-        return TransitionValue(cost=0)
+        # DONE
+        if next_state is not None:
+            return TransitionValue(cost=next_state.cars_queueing_east+state.cars_queueing_north,
+                                   reward=-(next_state.cars_queueing_east+state.cars_queueing_north))
+        else:
+            return TransitionValue(cost=0)
 
     def _get_next_state_distribution(self, state: TrafficLightState, action: TrafficLightAction) -> DiscreteDistribution[TrafficLightState]:
         '''
@@ -153,8 +157,26 @@ class TrafficLightDomain(Assignment1Domain):
           together with their respective probabilities.
         '''
         # TODO
-        return DiscreteDistribution( [
-        ])
+        ans = []
+
+        tau_north = tau_1
+        tau_east = tau_2
+
+        east_light = state.east_light.next_state(state.north_light,action)
+        north_light = state.north_light.next_state(state.east_light,action)
+
+        north_distribution = state.north_light.next_cars_queueing(state.cars_queueing_north,tau_north)
+        east_distribution = state.east_light.next_cars_queueing(state.cars_queueing_east,tau_east)
+
+        for (north_int, prob_north) in north_distribution:
+            for (east_int, prob_east) in east_distribution:
+                traffic_light_state = TrafficLightState(north_int,east_int,north_light,east_light)
+                traffic_light_state_prob = prob_north*prob_east
+                ans.append((traffic_light_state,traffic_light_state_prob))
+                if north_int == 3 and east_int == 2:
+                    print(prob_north)
+                    print(prob_east)
+        return DiscreteDistribution(ans)
     
     def _is_terminal(self, state: TrafficLightState) -> bool:
         '''
@@ -166,8 +188,18 @@ class TrafficLightDomain(Assignment1Domain):
         '''
           Returns the list of actions applicable in the specified state.
         '''
-        # TODO
+        # DONE
         result = []
+        north_light = state.north_light
+        east_light = state.east_light
+        if north_light == SingleLightState.RED and east_light == SingleLightState.GREEN:
+            result.append(TrafficLightAction.DO_NOT_SWITCH)
+            result.append(TrafficLightAction.SWITCH)
+        elif north_light == SingleLightState.GREEN and east_light == SingleLightState.RED:
+            result.append(TrafficLightAction.DO_NOT_SWITCH)
+            result.append(TrafficLightAction.SWITCH)
+        else:
+            result.append(TrafficLightAction.DO_NOT_SWITCH)
         return ListSpace(result)
     
     def _get_action_space_(self) -> ListSpace[TrafficLightAction]:

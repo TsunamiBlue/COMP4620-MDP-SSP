@@ -14,7 +14,7 @@ def hard_instance() -> StateMachine:
   3. The probability of a transition from one state to another 
      is either 0 or at least 0.1.
     '''
-    # TODO
+    # DONE
     transition_functions = [SMTransition("s6","a1",0,[("s6",1)]),
                             SMTransition("s1", "a2", 1, [("s2", 0.8),("s5",0.2)]),
                             SMTransition("s2", "a3", 1, [("s3", 1)]),
